@@ -11,8 +11,8 @@ app.use(helmet());
 app.use(cors({
     origin: [
         'https://algeria.blsspainglobal.com',
-        'https://bisselfie.uk',
-        'https://www.bisselfie.uk'
+        'https://blsselfie.uk',           // تم التصحيح هنا
+        'https://www.blsselfie.uk'         // تم التصحيح هنا
     ],
     credentials: true
 }));
@@ -30,7 +30,7 @@ app.use(express.json({ limit: '10mb' }));
 app.get('/', (req, res) => {
     res.json({ 
         message: 'BLS Selfie Server - Active 🚀',
-        domain: 'bisselfie.uk',
+        domain: 'blsselfie.uk',            // تم التصحيح هنا
         repository: 'hakotennah31/bls_selvie',
         status: 'running',
         timestamp: new Date().toISOString()
@@ -50,7 +50,7 @@ app.post('/api/sessions/upload', (req, res) => {
         res.json({
             success: true,
             sessionId: sessionId,
-            shareableUrl: `https://bisselfie.uk/s/${sessionId}`,
+            shareableUrl: `https://blsselfie.uk/s/${sessionId}`,  // تم التصحيح هنا
             message: 'Session exported successfully!',
             timestamp: new Date().toISOString()
         });
@@ -82,5 +82,5 @@ app.get('/s/:sessionId', (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`🛡️ BLS Selfie Server running on port ${PORT}`);
     console.log(`🌐 Repository: hakotennah31/bls_selvie`);
-    console.log(`🎯 Ready for: bisselfie.uk`);
+    console.log(`🎯 Ready for: blsselfie.uk`);  // تم التصحيح هنا
 });
