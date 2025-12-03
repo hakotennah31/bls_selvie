@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
@@ -19,7 +20,7 @@ app.use(cors({
 
 // 📊 تحديد معدل الطلبات
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
+    windowMs: 15 * 60 * 1000, // 15 دقيقة
     max: 100
 });
 app.use(limiter);
@@ -37,13 +38,24 @@ app.get('/', (req, res) => {
     });
 });
 
+// 💾 قاعدة بيانات مؤقتة للجلسات
+const sessionsDB = {}; // key: sessionId, value: session object
+
 // 📤 رفع جلسة
 app.post('/api/sessions/upload', (req, res) => {
     try {
         const sessionData = req.body;
 
-        // محاكاة حفظ الجلسة
+        // إنشاء sessionId عشوائي
         const sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+        // حفظ الجلسة في "DB"
+        sessionsDB[sessionId] = {
+            ...sessionData,
+            sessionId,
+            createdAt: new Date().toISOString(),
+            url: 'https://algeria.blsspainglobal.com/appointment/liveness' // الرابط النهائي
+        };
 
         console.log('📥 Session received:', sessionId);
 
@@ -62,20 +74,17 @@ app.post('/api/sessions/upload', (req, res) => {
     }
 });
 
-// 📥 استرجاع جلسة
+// 🔗 فتح رابط المشاركة (Redirect مباشر)
 app.get('/s/:sessionId', (req, res) => {
-    const { sessionId } = req.params;
+    const sessionId = req.params.sessionId;
+    const session = sessionsDB[sessionId];
 
-    res.json({
-        success: true,
-        sessionId: sessionId,
-        message: 'Session loaded successfully',
-        data: {
-            status: 'active',
-            createdAt: new Date().toISOString(),
-            url: 'https://algeria.blsspainglobal.com/appointment/liveness'
-        }
-    });
+    if (!session) {
+        return res.status(404).send("Session not found");
+    }
+
+    // إعادة توجيه مباشر للرابط الأصلي
+    return res.redirect(session.url);
 });
 
 // 🚀 تشغيل الخادم
