@@ -11,8 +11,8 @@ app.use(helmet());
 app.use(cors({
     origin: [
         'https://algeria.blsspainglobal.com',
-        'https://bisselfie.uk',
-        'https://www.bisselfie.uk'
+        'https://blsselfie.uk',
+        'https://www.blsselfie.uk'
     ],
     credentials: true
 }));
@@ -26,11 +26,11 @@ app.use(limiter);
 
 app.use(express.json({ limit: '10mb' }));
 
-// 🏠 صفحة الرئيسية
+// 🏠 الصفحة الرئيسية
 app.get('/', (req, res) => {
     res.json({ 
         message: 'BLS Selfie Server - Active 🚀',
-        domain: 'bisselfie.uk',
+        domain: 'blsselfie.uk',
         repository: 'hakotennah31/bls_selvie',
         status: 'running',
         timestamp: new Date().toISOString()
@@ -41,16 +41,16 @@ app.get('/', (req, res) => {
 app.post('/api/sessions/upload', (req, res) => {
     try {
         const sessionData = req.body;
-        
+
         // محاكاة حفظ الجلسة
         const sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        
+
         console.log('📥 Session received:', sessionId);
-        
+
         res.json({
             success: true,
             sessionId: sessionId,
-            shareableUrl: `https://bisselfie.uk/s/${sessionId}`,
+            shareableUrl: `https://blsselfie.uk/s/${sessionId}`,
             message: 'Session exported successfully!',
             timestamp: new Date().toISOString()
         });
@@ -65,7 +65,7 @@ app.post('/api/sessions/upload', (req, res) => {
 // 📥 استرجاع جلسة
 app.get('/s/:sessionId', (req, res) => {
     const { sessionId } = req.params;
-    
+
     res.json({
         success: true,
         sessionId: sessionId,
@@ -82,5 +82,5 @@ app.get('/s/:sessionId', (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`🛡️ BLS Selfie Server running on port ${PORT}`);
     console.log(`🌐 Repository: hakotennah31/bls_selvie`);
-    console.log(`🎯 Ready for: bisselfie.uk`);
+    console.log(`🎯 Ready for: blsselfie.uk`);
 });
